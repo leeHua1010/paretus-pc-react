@@ -1,16 +1,16 @@
-import { request } from "~/utils/request";
+import request from "~/utils/request";
 
 export default {
   create(data) {
-    return request({ url: "/articles", method: "post", data });
+    return request.post("/articles", data);
   },
   list(query) {
-    return request({ url: `/articles?${query}`, method: "get" });
+    return request.get(`/articles?${query}`);
   },
   read(id) {
-    return request({ url: `/articles/${id}`, method: "get" });
+    return request.get(`/articles/${id}`);
   },
   detail(id, query) {
-    return request({ url: `/articles/${id}?${query}`, method: "get" });
+    return request.get(`/articles/${id}?${query}`);
   },
 };

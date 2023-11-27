@@ -10,7 +10,7 @@ import { useScroll } from "ahooks";
 
 export default function Home() {
   const [hotArticles, setHotArticles] = useState([]);
-  const { pageSize } = usePaginate(100);
+  const { pageSize } = usePaginate();
   const navigate = useNavigate();
   const scroll = useScroll(document.getElementById("layout"));
 

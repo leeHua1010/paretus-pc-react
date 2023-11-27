@@ -28,12 +28,12 @@ export default function Layout() {
   const items = [
     {
       key: "1",
-      label: <span onClick={goProfile}>Profile</span>,
+      label: <a onClick={goProfile}>Profile</a>,
       icon: <IconUserCircle size={20} />,
     },
     {
       key: "2",
-      label: <span onClick={handleLogout}>Louout</span>,
+      label: <a onClick={() => handleLogout}>Louout</a>,
       icon: <IconLogout size={20} />,
     },
   ];
@@ -42,7 +42,7 @@ export default function Layout() {
     <div className="box-border h-screen bg-light-400">
       <div className="bg-white h-14 fcb box-border shadow-sm px-24 <sm:px-3">
         <div className="fcc cursor-pointer" onClick={goHome}>
-          <i className="text-3xl text-[#4945ff] i-tabler-aperture"></i>
+          <i className="text-3xl text-[#4945ff] i-tabler-aperture hover:animate-spin"></i>
           <div className="text-xl pl-2">Paretus</div>
         </div>
         {!appStore.userInfo ? (
