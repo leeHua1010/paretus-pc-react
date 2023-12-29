@@ -55,6 +55,7 @@ class Request {
   put(url, data, config) {
     return this.request({ ...config, method: "put", url, data });
   }
+
   delete(url, config) {
     return this.request({ ...config, method: "delete", url });
   }

@@ -42,7 +42,7 @@ export default function CreateArticle() {
 
         <Editor value={content} plugins={plugins} onChange={onChange} />
 
-        <div className="flex justify-center mt-8">
+        <div className="flex mt-8 justify-center">
           <Form.Item className="w-98 <sm:w-72">
             <Button type="primary" block size="large" shape="round" htmlType="submit">
               Publish

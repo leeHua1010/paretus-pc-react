@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { Form, Input, Button, message } from "antd";
 import authApi from "~/api/auth";
+import userApi from "~/api/user";
 import storage from "~/utils/storage";
 import { useNavigate } from "react-router-dom";
 import { useAppStore } from "~/store/app";
+import { stringify } from "~/utils/utils";
 
 export default function Register() {
   const [loading, setLoading] = useState(false);
@@ -19,8 +21,10 @@ export default function Register() {
       messageApi.open({ key, type: "loading", content: "Register..." });
       const { data } = await authApi.register(values);
       storage.setToken(data.jwt);
-      storage.setUserInfo(data.user);
-      appStore.setUserInfo(data.user);
+      const query = stringify({ populate: ["avatar"] });
+      const { data: userInfo } = await userApi.me(query);
+      storage.setUserInfo(userInfo);
+      appStore.setUserInfo(userInfo);
       messageApi.open({ key, type: "success", content: "Welcome back!", duration: 2 });
       navigate("/", { replace: true });
       setLoading(false);
@@ -81,7 +85,7 @@ export default function Register() {
             </Button>
           </Form.Item>
           <Form.Item>
-            <div className="text-gray-500 my-0">
+            <div className="my-0 text-gray-500">
               <span>Had an account?</span>
               <span className="font-semibold text-[#4945ff]" onClick={goSignin}>
                 {" "}

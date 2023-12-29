@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import articleApi from "~/api/article";
 import { usePaginate } from "~/hooks";
 import { stringify } from "~/utils/utils";
@@ -51,7 +51,11 @@ export default function Home() {
     setHotArticles(res.data);
   };
 
-  const checkDetail = (id) => navigate("/article/detail", { state: { id } });
+  const checkDetail = async (item) => {
+    const data = { ...item, views: item.views + 1 };
+    await articleApi.update(item.id, data);
+    navigate("/article/detail", { state: { id: item.id } });
+  };
 
   const onBackTop = () => {
     document.getElementById("layout").scrollTo({ top: 0, behavior: "smooth" });
@@ -61,44 +65,44 @@ export default function Home() {
     <div className="flex">
       <div className="flex-1">
         {loading ? (
-          <div className="animate-bounce text-xl">loading...</div>
+          <div className="text-xl animate-bounce">loading...</div>
         ) : (
-          <Fragment>
+          <>
             {data?.list?.map((item) => (
               <div
                 key={item.id}
-                className="bg-white py-2 px-4 rounded-md mb-3 cursor-pointer hover:bg-light-200"
-                onClick={() => checkDetail(item.id)}
+                className="bg-white rounded-md cursor-pointer mb-3 py-2 px-4 hover:bg-light-200"
+                onClick={() => checkDetail(item)}
               >
-                <div className="flex items-center text-[#8a919f] text-sm">
+                <div className="flex text-sm text-[#8a919f] items-center">
                   <div>{item?.user?.username}</div>
                   <Divider type="vertical" />
                   <div>{formatRelativeTime(item.createdAt)}</div>
                 </div>
                 <div className="font-600 py-3">{item.title}</div>
                 <div className="text-[#6B6B6B] text-13px">{item.content.substring(0, 36)}</div>
-                <div className="flex items-center justify-between text-[#6B6B6B] mt-2">
-                  <div className="flex items-center text-[#8a919f]">
-                    <div className="flex items-center mr-5 text-sm">
-                      <i className="i-tabler-eye text-base"></i>
+                <div className="flex mt-2 text-[#6B6B6B] items-center justify-between">
+                  <div className="flex text-[#8a919f] items-center">
+                    <div className="flex mr-5 text-sm items-center">
+                      <i className="text-base i-tabler-eye"></i>
                       <div className="pl-1">{item.views}</div>
                     </div>
                   </div>
                 </div>
               </div>
             ))}
-          </Fragment>
+          </>
         )}
       </div>
 
       <div className="ml-6">
         <div className="bg-white rounded-md p-4 w-64">
-          <div className="font-bold pb-3 border border-b-solid border-b-[#e4e6eb]">热榜 🔥</div>
+          <div className="border border-b-solid font-bold border-b-[#e4e6eb] pb-3">热榜 🔥</div>
           {hotArticles.map((item) => (
             <div
               key={item.id}
-              onClick={() => checkDetail(item.id)}
-              className="pt-4 text-sm cursor-pointer truncate hover:opacity-70"
+              onClick={() => checkDetail(item)}
+              className="cursor-pointer text-sm pt-4 truncate hover:opacity-70"
             >
               {item.title}
             </div>
@@ -106,16 +110,16 @@ export default function Home() {
         </div>
       </div>
 
-      <Fragment>
+      <>
         {scroll?.top > 1688 && (
           <div
             onClick={onBackTop}
-            className="absolute right-10 bottom-12 bg-white w-10 h-10 rounded-1/2 flex items-center justify-center shadow cursor-pointer"
+            className="bg-white cursor-pointer flex rounded-1/2 h-10 shadow right-10 bottom-12 w-10 absolute items-center justify-center"
           >
-            <i className="i-tabler-arrow-bar-to-up text-xl" />
+            <i className="text-xl i-tabler-arrow-bar-to-up" />
           </div>
         )}
-      </Fragment>
+      </>
     </div>
   );
 }

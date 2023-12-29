@@ -1,9 +1,11 @@
 import { Form, Input, Button, message } from "antd";
 import authApi from "~/api/auth";
+import userApi from "~/api/user";
 import storage from "~/utils/storage";
 import { useNavigate } from "react-router-dom";
 import { useAppStore } from "~/store/app";
 import { useState } from "react";
+import { stringify } from "~/utils/utils";
 
 export default function Login() {
   const [loading, setLoading] = useState(false);
@@ -11,7 +13,7 @@ export default function Login() {
   const [messageApi, contextHolder] = message.useMessage();
   const key = "login";
   const navigate = useNavigate();
-  const appStore = useAppStore();
+  const appStore = useAppStore((state) => state);
 
   const onFinish = async (values) => {
     try {
@@ -19,8 +21,10 @@ export default function Login() {
       messageApi.open({ key, type: "loading", content: "Login..." });
       const { data } = await authApi.login(values);
       storage.setToken(data.jwt);
-      storage.setUserInfo(data.user);
-      appStore.setUserInfo(data.user);
+      const query = stringify({ populate: ["avatar"] });
+      const { data: userInfo } = await userApi.me(query);
+      storage.setUserInfo(userInfo);
+      appStore.setUserInfo(userInfo);
       messageApi.open({ key, type: "success", content: "Welcome back!", duration: 2 });
       setLoading(false);
       navigate("/", { replace: true });
@@ -29,7 +33,7 @@ export default function Login() {
     }
   };
 
-  const goRegister = () => navigate({ pathname: "/auth/register" });
+  const goRegister = () => navigate("/auth/register");
 
   return (
     <div className="fcc">

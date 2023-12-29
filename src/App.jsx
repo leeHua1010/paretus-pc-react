@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { ConfigProvider, Spin } from "antd";
+import { ConfigProvider } from "antd";
 import Router from "~/router/index.jsx";
 
 function App() {
@@ -11,7 +11,7 @@ function App() {
 
   return (
     <ConfigProvider theme={themeOverrides}>
-      <Suspense fallback={<Spin />}>
+      <Suspense fallback={null}>
         <Router />
       </Suspense>
     </ConfigProvider>

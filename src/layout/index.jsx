@@ -3,6 +3,7 @@ import { useAppStore } from "~/store/app";
 import { Button, Dropdown } from "antd";
 import { IconLogout, IconUserCircle } from "@tabler/icons-react";
 import storage from "~/utils/storage";
+import { getAvatarSrc } from "~/utils/utils";
 
 export default function Layout() {
   const navigate = useNavigate();
@@ -33,15 +34,15 @@ export default function Layout() {
     },
     {
       key: "2",
-      label: <a onClick={() => handleLogout}>Louout</a>,
+      label: <a onClick={handleLogout}>Louout</a>,
       icon: <IconLogout size={20} />,
     },
   ];
 
   return (
-    <div className="box-border h-screen bg-light-400">
-      <div className="bg-white h-14 fcb box-border shadow-sm px-24 <sm:px-3">
-        <div className="fcc cursor-pointer" onClick={goHome}>
+    <div className="h-screen bg-light-400 box-border">
+      <div className="bg-white h-14 shadow-sm px-24 fcb box-border <sm:px-3">
+        <div className="cursor-pointer fcc" onClick={goHome}>
           <i className="text-3xl text-[#4945ff] i-tabler-aperture hover:animate-spin"></i>
           <div className="text-xl pl-2">Paretus</div>
         </div>
@@ -58,15 +59,19 @@ export default function Layout() {
           </div>
         ) : (
           <div className="flex items-center">
-            <div className="flex items-center mr-6 cursor-pointer" onClick={goCreateArticle}>
-              <i className="i-tabler-edit text-lg"></i>
-              <div className="pl-1 text-sm">Write</div>
+            <div className="cursor-pointer flex mr-6 items-center" onClick={goCreateArticle}>
+              <i className="text-lg i-tabler-edit"></i>
+              <div className="text-sm pl-1">Write</div>
             </div>
-            <div className="flex items-center cursor-pointer">
+            <div className="cursor-pointer flex items-center">
               <Dropdown menu={{ items }}>
-                <div className="bg-[#6a69ff] flex items-center justify-center w-8.5 h8.5 text-white rounded-1/2 text-sm">
-                  {appStore.userInfo?.username?.charAt(0).toUpperCase()}
-                </div>
+                {getAvatarSrc() ? (
+                  <img className="rounded-1/2 w-8.5 h8.5" src={getAvatarSrc()} alt="avatar" />
+                ) : (
+                  <div className="flex bg-[#6a69ff] rounded-1/2 text-white text-sm w-8.5 items-center justify-center h8.5">
+                    {appStore.userInfo?.username?.charAt(0).toUpperCase()}
+                  </div>
+                )}
               </Dropdown>
             </div>
           </div>
@@ -74,7 +79,7 @@ export default function Layout() {
       </div>
       <div
         id="layout"
-        className="px-24 pt-4 h-[calc(100vh-56px)] overflow-y-scroll box-border <sm:px-3"
+        className="h-[calc(100vh-56px)] min-w-188 px-24 pt-4 overflow-y-scroll box-border <sm:px-3"
       >
         <Outlet />
       </div>
