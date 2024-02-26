@@ -17,7 +17,7 @@ export default function Profile() {
   const [pagination, setPagination] = useState(null);
   const avatarRef = useRef(null);
 
-  const isAvararHover = useHover(avatarRef);
+  const isAvatarHover = useHover(avatarRef);
   const navigate = useNavigate();
   let { page, setPage, pageSize } = usePaginate(10);
   const appStore = useAppStore((state) => state);
@@ -41,7 +41,7 @@ export default function Profile() {
   const checkDetail = async (item) => {
     const data = { ...item, views: item.views + 1 };
     await articleApi.update(item.id, data);
-    navigate("/article/detail", { state: { id: item.id } });
+    navigate(`/article/detail?id=${item.id}`);
   };
 
   const TabPlane = () => {
@@ -54,7 +54,7 @@ export default function Profile() {
               onClick={() => checkDetail(item)}
               className="border-b border-b-solid rounded-md border-b-[#EFEFF5] py-3 last:!border-none"
             >
-              <div className="font-bold">{item.title}</div>
+              <div className="cursor-pointer font-bold">{item.title}</div>
               <div className="text-sm pt-1 text-[#8590a6]">{formatTime(item.createdAt)}</div>
             </div>
           ))
@@ -108,7 +108,7 @@ export default function Profile() {
                 {appStore.userInfo?.username?.charAt(0).toUpperCase()}
               </div>
             )}
-            {isAvararHover && (
+            {isAvatarHover && (
               <div className="rounded-xl flex-col bg-[#191b1f] bg-opacity-40  h-22 text-white top-0 left-0 w-22 absolute fcc">
                 <i className="text-2xl i-tabler-camera"></i>
                 <div>修改头像</div>

@@ -7,12 +7,19 @@ import { formatRelativeTime } from "~/utils/time";
 import { Divider } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useScroll } from "ahooks";
+import { useActivate } from "react-activation";
 
 export default function Home() {
   const [hotArticles, setHotArticles] = useState([]);
+  const [scrollTop, setScrollTop] = useState(0);
+
   const { pageSize } = usePaginate();
   const navigate = useNavigate();
   const scroll = useScroll(document.getElementById("layout"));
+
+  useActivate(() => {
+    document.getElementById("layout").scrollTo({ top: scrollTop });
+  });
 
   useEffect(() => {
     getHotArticles();
@@ -52,9 +59,10 @@ export default function Home() {
   };
 
   const checkDetail = async (item) => {
+    setScrollTop(scroll.top);
     const data = { ...item, views: item.views + 1 };
     await articleApi.update(item.id, data);
-    navigate("/article/detail", { state: { id: item.id } });
+    navigate(`/article/detail?id=${item.id}`);
   };
 
   const onBackTop = () => {

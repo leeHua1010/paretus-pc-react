@@ -1,5 +1,6 @@
 import { lazy } from "react";
 import { useRoutes } from "react-router-dom";
+import KeepAlive from "react-activation";
 
 const Layout = lazy(() => import("~/layout"));
 const NotFound = lazy(() => import("~/components/not-found"));
@@ -17,7 +18,11 @@ const routes = [
     children: [
       {
         path: "/",
-        element: <Home />,
+        element: (
+          <KeepAlive cacheKey="Home">
+            <Home />
+          </KeepAlive>
+        ),
       },
     ],
   },

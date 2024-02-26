@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { ConfigProvider } from "antd";
 import Router from "~/router/index.jsx";
+import { AliveScope } from "react-activation";
 
 function App() {
   const themeOverrides = {
@@ -12,7 +13,9 @@ function App() {
   return (
     <ConfigProvider theme={themeOverrides}>
       <Suspense fallback={null}>
-        <Router />
+        <AliveScope>
+          <Router />
+        </AliveScope>
       </Suspense>
     </ConfigProvider>
   );
